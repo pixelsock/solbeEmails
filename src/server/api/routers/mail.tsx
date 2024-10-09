@@ -39,13 +39,22 @@ const draftFilter = (accountId: string): Prisma.ThreadWhereInput => ({
 
 export const mailRouter = createTRPCRouter({
     getAccounts: protectedProcedure.query(async ({ ctx }) => {
-        return await ctx.db.account.findMany({
-            where: {
-                userId: ctx.auth.userId,
-            }, select: {
-                id: true, emailAddress: true, name: true
-            }
-        })
+        console.log('getAccounts procedure running, userId:', ctx.auth.userId);
+        try {
+            const accounts = await ctx.db.account.findMany({
+                where: {
+                    userId: ctx.auth.userId,
+                },
+                select: {
+                    id: true, emailAddress: true, name: true
+                }
+            });
+            console.log('Accounts found:', accounts);
+            return accounts;
+        } catch (error) {
+            console.error('Error fetching accounts:', error);
+            throw new Error('Failed to fetch accounts');
+        }
     }),
     getNumThreads: protectedProcedure.input(z.object({
         accountId: z.string(),

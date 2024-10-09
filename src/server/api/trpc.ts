@@ -100,6 +100,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 });
 
 const isAuth = t.middleware(({ next, ctx }) => {
+  console.log('isAuth middleware running, userId:', ctx.auth?.userId);
   if (!ctx.auth?.userId) {
     throw new Error("Unauthorized");
   }

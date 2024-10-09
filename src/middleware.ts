@@ -13,12 +13,12 @@ const isPublicRoute = createRouteMatcher([
 ])
 
 export default clerkMiddleware((auth, req) => {
+  console.log('Middleware running for path:', req.nextUrl.pathname);
   if (!isPublicRoute(req)) {
-    auth().protect()
+    console.log('Protecting route:', req.nextUrl.pathname);
+    auth().protect();
   }
-
 })
-
 
 export const config = {
   matcher: [
